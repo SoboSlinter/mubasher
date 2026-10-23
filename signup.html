@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="meta.signup.title">إنشاء حساب | مباشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-visual">
+    <div class="brand"><span class="brand-mark">م</span> <span data-i18n="brand.name">مباشر</span></div>
+    <div class="quote">
+      <h2 data-i18n="auth.visualSignupTitle">انضم إلى آلاف المستخدمين الذين يبيعون ويشترون بثقة</h2>
+      <p data-i18n="auth.visualSignupSub">أنشئ حسابك لتتمكن من حفظ الإعلانات، ونشر عقاراتك وسياراتك، والتواصل المباشر مع المهتمين.</p>
+    </div>
+    <div class="foot-note" data-i18n="footer.copyright">© 2026 مباشر. جميع الحقوق محفوظة.</div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <div class="back-row back-row-end">
+        <div class="header-user-badge" id="headerUserBadge">
+          <span class="header-user-avatar" id="headerUserAvatar">م</span>
+          <span class="header-user-name" id="headerUserName"></span>
+        </div>
+        <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+        <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+      </div>
+      <h1 data-i18n="auth.signupTitle">إنشاء حساب جديد</h1>
+      <p class="sub" data-i18n="auth.signupSub">املأ بياناتك للبدء في استخدام المنصة</p>
+
+      <div class="form-status" id="formStatus"></div>
+
+      <form id="signupForm" novalidate>
+        <div class="form-field" id="nameField">
+          <label for="fullName" data-i18n="field.fullName">الاسم الكامل</label>
+          <input type="text" id="fullName" name="fullName" data-i18n-placeholder="field.fullNamePlaceholder" placeholder="محمد أحمد" autocomplete="name">
+          <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+        </div>
+
+        <div class="form-field" id="usernameField">
+          <label for="username" data-i18n="field.username">اسم المستخدم</label>
+          <input type="text" id="username" name="username" data-i18n-placeholder="field.usernamePlaceholder" placeholder="mohamed_ahmed" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false">
+          <span class="error-msg" data-i18n="error.username">اسم المستخدم من 3 إلى 20 حرفًا: إنجليزية أو أرقام أو _ أو . فقط</span>
+        </div>
+
+        <div class="form-field" id="emailField">
+          <label for="email" data-i18n="field.email">البريد الإلكتروني</label>
+          <input type="email" id="email" name="email" placeholder="example@email.com" autocomplete="email">
+          <span class="error-msg" data-i18n="error.email">الرجاء إدخال بريد إلكتروني صحيح</span>
+        </div>
+
+        <div class="form-field" id="phoneField">
+          <label for="phone" data-i18n="field.phone">رقم الجوال</label>
+          <input type="tel" id="phone" name="phone" placeholder="09xxxxxxxx" autocomplete="tel">
+          <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+        </div>
+
+        <div class="form-field" id="birthdateField">
+          <label for="birthdate" data-i18n="field.birthdate">تاريخ الميلاد</label>
+          <input type="date" id="birthdate" name="birthdate">
+          <span class="error-msg" id="birthdateErrorMsg" data-i18n="error.birthdate">الرجاء إدخال تاريخ ميلاد صحيح</span>
+          <span class="hint" data-i18n="auth.ageRequirementHint">يجب أن يكون عمرك 18 عامًا أو أكثر لإنشاء حساب.</span>
+        </div>
+
+        <div class="form-field photo-capture-field" id="profilePhotoField">
+          <label data-i18n="field.profilePhotoRequired">الصورة الشخصية</label>
+          <div class="photo-capture-card" id="profilePhotoCard" data-shape="circle">
+            <div class="photo-capture-stage" id="profilePhotoStage">
+              <div class="photo-capture-placeholder" id="profilePhotoPlaceholder">
+                <span class="photo-capture-icon">🙂</span>
+                <span data-i18n="photoCapture.profilePlaceholder">أضف صورة شخصية واضحة</span>
+              </div>
+              <video class="photo-capture-video" id="profilePhotoVideo" autoplay playsinline muted></video>
+              <img class="photo-capture-preview-img" id="profilePhotoPreviewImg" alt="">
+              <canvas class="photo-capture-canvas" id="profilePhotoCanvas"></canvas>
+            </div>
+            <div class="photo-capture-actions" id="profilePhotoActionsIdle">
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="profilePhotoCameraBtn" data-i18n="photoCapture.openCamera">📷 التقاط بالكاميرا</button>
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="profilePhotoBrowseBtn" data-i18n="photoCapture.chooseFile">🖼️ اختيار من الجهاز</button>
+            </div>
+            <div class="photo-capture-actions" id="profilePhotoActionsLive" style="display:none;">
+              <button type="button" class="btn btn-solid photo-capture-btn" id="profilePhotoSnapBtn" data-i18n="photoCapture.snap">التقاط الصورة</button>
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="profilePhotoCameraCancelBtn" data-i18n="photoCapture.cancel">إلغاء</button>
+            </div>
+            <div class="photo-capture-actions" id="profilePhotoActionsDone" style="display:none;">
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="profilePhotoRetakeBtn" data-i18n="photoCapture.retake">🔄 إعادة الالتقاط</button>
+            </div>
+            <input type="file" class="photo-capture-native-input" id="profilePhoto" accept="image/*" capture="user">
+          </div>
+          <span class="error-msg" data-i18n="error.profilePhoto">الرجاء إرفاق صورة شخصية</span>
+          <span class="hint" data-i18n="field.profilePhotoHintRequired">يجب إضافة صورة شخصية، وستظهر بجانب اسم المنصة بعد تسجيل الدخول.</span>
+        </div>
+
+        <div class="form-section-title" data-i18n="field.identityVerificationTitle">التحقق من الهوية</div>
+        <p class="plan-intro" data-i18n="field.identityVerificationIntro">هذه البيانات مطلوبة لمراجعة طلبك من قبل الإدارة قبل تفعيل حسابك، ويتم استخدامها للأغراض القانونية فقط.</p>
+
+        <div class="form-field" id="nationalIdField">
+          <label for="nationalId" data-i18n="field.nationalId">الرقم الوطني</label>
+          <input type="text" id="nationalId" name="nationalId" inputmode="numeric" placeholder="000000000000000">
+          <span class="error-msg" data-i18n="error.nationalId">الرجاء إدخال الرقم الوطني</span>
+        </div>
+
+        <div class="form-field photo-capture-field" id="idPhotoField">
+          <label data-i18n="field.idPhoto">صورة الهوية</label>
+          <div class="photo-capture-card" id="idPhotoCard" data-shape="card">
+            <div class="photo-capture-stage" id="idPhotoStage">
+              <div class="photo-capture-id-guide"></div>
+              <div class="photo-capture-placeholder" id="idPhotoPlaceholder">
+                <span class="photo-capture-icon">🪪</span>
+                <span data-i18n="photoCapture.idPlaceholder">أضف صورة واضحة لبطاقة الهوية</span>
+              </div>
+              <video class="photo-capture-video" id="idPhotoVideo" autoplay playsinline muted></video>
+              <img class="photo-capture-preview-img" id="idPhotoPreviewImg" alt="">
+              <canvas class="photo-capture-canvas" id="idPhotoCanvas"></canvas>
+            </div>
+            <div class="photo-capture-actions" id="idPhotoActionsIdle">
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="idPhotoCameraBtn" data-i18n="photoCapture.openCamera">📷 التقاط بالكاميرا</button>
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="idPhotoBrowseBtn" data-i18n="photoCapture.chooseFile">🖼️ اختيار من الجهاز</button>
+            </div>
+            <div class="photo-capture-actions" id="idPhotoActionsLive" style="display:none;">
+              <button type="button" class="btn btn-solid photo-capture-btn" id="idPhotoSnapBtn" data-i18n="photoCapture.snap">التقاط الصورة</button>
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="idPhotoCameraCancelBtn" data-i18n="photoCapture.cancel">إلغاء</button>
+            </div>
+            <div class="photo-capture-actions" id="idPhotoActionsDone" style="display:none;">
+              <button type="button" class="btn btn-ghost photo-capture-btn" id="idPhotoRetakeBtn" data-i18n="photoCapture.retake">🔄 إعادة الالتقاط</button>
+            </div>
+            <input type="file" class="photo-capture-native-input" id="idPhoto" accept="image/*" capture="environment">
+          </div>
+          <span class="error-msg" data-i18n="error.idPhoto">الرجاء التقاط أو إرفاق صورة للهوية</span>
+          <span class="hint" data-i18n="field.idPhotoHint">التقط صورة واضحة لهويتك الوطنية أو ارفقها من جهازك. تُستخدم هذه الصورة فقط للتحقق من هويتك من قبل الإدارة.</span>
+        </div>
+
+        <div class="form-field" id="passwordField">
+          <label for="password" data-i18n="field.password">كلمة المرور</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="new-password">
+          <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+        </div>
+
+        <div class="form-field" id="confirmField">
+          <label for="confirmPassword" data-i18n="field.confirmPassword">تأكيد كلمة المرور</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+          <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+        </div>
+
+        <div class="form-section-title" data-i18n="plan.title">اختر خطة الاشتراك</div>
+        <p class="plan-intro" data-i18n="plan.intro">اشتراك شهري لنشر إعلاناتك على المنصة، بإمكانك الدفع شهريًا أو الدفع سنويًا بخصم.</p>
+        <div class="plan-picker" id="planPicker">
+          <label class="plan-option active" data-plan="monthly">
+            <span class="plan-badge plan-discount-badge" id="monthlyDiscountBadge" style="display:none;"></span>
+            <input type="radio" name="plan" value="monthly" id="planMonthly" checked>
+            <span class="plan-name" data-i18n="plan.monthly.name">شهري</span>
+            <span class="plan-price" id="monthlyPlanPrice">20٬000 <span class="plan-currency-unit" data-i18n="plan.currency">ج.س</span></span>
+            <span class="plan-period" data-i18n="plan.perMonth">شهريًا</span>
+          </label>
+          <label class="plan-option" data-plan="yearly">
+            <span class="plan-badge" data-i18n="plan.yearly.badge">خصم 17%</span>
+            <span class="plan-badge plan-discount-badge" id="yearlyDiscountBadge" style="display:none;"></span>
+            <input type="radio" name="plan" value="yearly" id="planYearly">
+            <span class="plan-name" data-i18n="plan.yearly.name">سنوي</span>
+            <span class="plan-price" id="yearlyPlanPrice">199٬000 <span class="plan-currency-unit" data-i18n="plan.currency">ج.س</span></span>
+            <span class="plan-period" data-i18n="plan.perYear">سنويًا</span>
+            <span class="plan-savings" id="yearlyPlanSavings">توفّر 41٬000 ج.س سنويًا مقارنة بالدفع الشهري</span>
+            <span class="plan-compare-note" id="yearlyPlanCompareNote">بدلاً من 240٬000 ج.س عند الدفع شهريًا (20٬000 × 12 شهرًا)</span>
+          </label>
+        </div>
+
+        <label class="terms-row">
+          <input type="checkbox" id="terms" name="terms">
+          <span>
+            <span data-i18n="auth.agreeTo">أوافق على</span>
+            <a href="terms.html" data-i18n="footer.contact.terms">الشروط والأحكام</a>
+            <span data-i18n="auth.and">و</span>
+            <a href="privacy.html" data-i18n="footer.contact.privacy">سياسة الخصوصية</a>
+          </span>
+        </label>
+
+        <button type="submit" class="submit-btn" id="submitBtn" data-i18n="auth.signupBtn">إنشاء الحساب</button>
+      </form>
+
+      <div class="divider" data-i18n="auth.or">أو</div>
+
+      <p class="signup-note"><span data-i18n="auth.hasAccount">لديك حساب بالفعل؟</span> <a href="login.html" data-i18n="auth.login">تسجيل الدخول</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

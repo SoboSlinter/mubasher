@@ -1,0 +1,160 @@
+/* ============================================================
+   قالب frost-blue (من مكتبة التصميم) على كامل الموقع ولوحة الإدارة
+   خلفية زرقاء جليدية، بطاقات زجاجية بيضاء، أزرق ملكي + كحلي، أزرار وشرائط على شكل حبوب.
+   يُحمَّل بعد styles.css ويعيد تعريف الألوان ثم المكوّنات الرئيسية.
+   ============================================================ */
+:root{
+  --ink:#0f1a33; --ink-soft:#6b7792;
+  --sand:#e6edf7; --sand-deep:#e3ebf8;
+  --brass:#1f62e8; --brass-deep:#173d8f;
+  --teal:#1b3a7a; --teal-deep:#152f6e;
+  --gold:#f5b324;
+  --white:#ffffff; --line:rgba(31,98,232,.14);
+  --radius-card:24px;
+  --navy:#1b3a7a; --track:rgba(31,98,232,.12);
+  --grad-brand:linear-gradient(170deg,#24489a,#152f6e);
+  --grad-accent:linear-gradient(135deg,#ffb454,#f08c00);
+  --grad-blue:linear-gradient(135deg,#4a82f5,#1f62e8);
+  --grad-green:linear-gradient(135deg,#34c793,#17915f);
+  --grad-purple:linear-gradient(135deg,#7c8cf8,#4b5fe0);
+  --glass-bg:rgba(255,255,255,.62); --glass-border:rgba(255,255,255,.95);
+  --glass-shadow:0 10px 30px rgba(40,60,120,.10);
+  --frost-bg:linear-gradient(160deg,#dde6f2,#f1f5fb 50%,#d9e4f2);
+}
+:root[data-theme="dark"]{
+  --ink:#e6ecf6; --ink-soft:#9aa6bd;
+  --sand:#0d1422; --sand-deep:#16213a;
+  --brass:#5b8def; --brass-deep:#8fb0f7;
+  --teal:#3a5fb8; --teal-deep:#1a2f66;
+  --white:#151d2f; --line:rgba(120,150,220,.2);
+  --track:rgba(91,141,239,.18);
+  --glass-bg:rgba(21,29,47,.7); --glass-border:rgba(255,255,255,.08);
+  --glass-shadow:0 10px 30px rgba(0,0,0,.35);
+  --frost-bg:linear-gradient(160deg,#0b111d,#111a2c 50%,#0b111d);
+}
+body{font-family:'Noto Naskh Arabic','IBM Plex Sans Arabic',serif;background:var(--frost-bg);background-attachment:fixed;color:var(--ink)}
+html[lang="en"] body{font-family:'Poppins','Inter',-apple-system,sans-serif}
+
+/* الهيدر: زجاج فاتح مع شريط تنقل على شكل حبوب */
+header,.listing-header{background:var(--glass-bg);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  border-bottom:1px solid var(--glass-border);box-shadow:0 6px 24px rgba(40,60,120,.08)}
+:root[data-theme="dark"] header,:root[data-theme="dark"] .listing-header{background:var(--glass-bg)}
+.brand{color:var(--ink)}
+.brand-mark{background:linear-gradient(135deg,#4a82f5,#1f62e8);color:#fff;border-radius:11px;box-shadow:0 6px 14px rgba(31,98,232,.35)}
+nav.links{gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--glass-border)}
+:root[data-theme="dark"] nav.links{background:rgba(255,255,255,.05)}
+nav.links a{color:var(--ink);font-size:13.5px;padding:7px 14px;border-bottom:0;border-radius:999px}
+nav.links a:hover,nav.links a:focus-visible{background:var(--navy);color:#fff;border-color:transparent}
+:root[data-theme="dark"] nav.links a:hover{background:var(--brass);color:#fff}
+header .btn-ghost{color:var(--navy);border-color:rgba(27,58,122,.35)}
+:root[data-theme="dark"] header .btn-ghost{color:var(--ink);border-color:rgba(255,255,255,.3)}
+header .btn-ghost:hover{background:var(--navy);color:#fff}
+header .mobile-nav-toggle{border-color:rgba(27,58,122,.35);color:var(--navy)}
+header .mobile-nav-toggle:hover{background:var(--navy);color:#fff}
+header .header-user-name{color:var(--ink)}
+header .header-user-badge:hover{background:rgba(31,98,232,.08)}
+.unread-badge{box-shadow:0 0 0 2px var(--white)}
+
+/* الأزرار: حبوب */
+.btn{border-radius:999px;font-weight:700}
+.btn-solid{background:linear-gradient(180deg,#4a82f5,#1f62e8);color:#fff;box-shadow:0 8px 20px rgba(31,98,232,.32),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn-solid:hover{filter:brightness(1.06);box-shadow:0 10px 24px rgba(31,98,232,.4),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn-ghost{color:var(--navy);border-color:rgba(27,58,122,.4);background:transparent}
+:root[data-theme="dark"] .btn-ghost{color:var(--ink);border-color:rgba(255,255,255,.3)}
+.btn-ghost:hover{background:var(--navy);color:#fff}
+.btn-danger{border-color:#d63447;color:#d63447}.btn-danger:hover{background:#d63447;color:#fff}
+
+/* شريط البحث */
+.amazon-search-bar{border-radius:999px;border:1px solid var(--glass-border);background:rgba(255,255,255,.8);box-shadow:0 6px 18px rgba(40,60,120,.1)}
+.amazon-search-bar select{background:transparent;border-inline-end:1px solid var(--line)}
+.amazon-search-bar input{background:transparent}
+.amazon-search-bar button{background:linear-gradient(180deg,#4a82f5,#1f62e8);color:#fff}
+.amazon-search-bar button:hover{background:var(--brass-deep)}
+.amazon-search-bar button.amazon-search-filters-btn{background:transparent;color:var(--ink-soft)}
+.amazon-search-bar button.amazon-search-filters-btn:hover,.amazon-search-bar button.amazon-search-filters-btn.active{background:var(--sand-deep);color:var(--navy)}
+:root[data-theme="dark"] .amazon-search-bar{background:rgba(255,255,255,.06)}
+
+/* الواجهة الرئيسية: لوحة كحلية مستديرة */
+.hero{background:var(--grad-brand);color:#fff;border-radius:0 0 36px 36px;box-shadow:0 18px 40px rgba(21,47,110,.28)}
+.hero::before{background:radial-gradient(560px 360px at 88% 12%,rgba(255,255,255,.14),transparent 70%)}
+.hero-eyebrow{color:#a9c4ff}
+:root[data-theme="dark"] .hero{background:var(--grad-brand);color:#fff}
+:root[data-theme="dark"] .hero .hero-eyebrow{color:#a9c4ff}
+
+.section-head{background:transparent;border:0;padding:0;margin-bottom:18px}
+.section-head h2{font-size:24px;font-weight:700}
+
+/* بطاقات زجاجية */
+.card,.cat-card,.listing-form-card,.modal,.admin-section,.admin-stat-tile,.notif-dropdown{
+  background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:24px;
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,.9)}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .cat-card,:root[data-theme="dark"] .listing-form-card,:root[data-theme="dark"] .modal,:root[data-theme="dark"] .admin-section,:root[data-theme="dark"] .admin-stat-tile{box-shadow:var(--glass-shadow)}
+.card{overflow:hidden;border-top:1px solid var(--glass-border)}
+.card:hover{box-shadow:0 18px 40px rgba(40,60,120,.18);transform:translateY(-3px)}
+.card-price{color:var(--brass)}
+.badge{border-radius:999px}
+.badge.sale{background:var(--navy);color:#fff}
+.badge.badge-featured{background:var(--gold);color:#3a2a00}
+.cat-icon{border-radius:50%!important}
+.cat-card:hover{box-shadow:0 14px 30px rgba(40,60,120,.18)}
+.trust-strip{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow)}
+.trust-item+.trust-item{border:0}
+
+/* النماذج */
+.form-field input,.form-field select,.form-field textarea{border-radius:14px;border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.75);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+:root[data-theme="dark"] .form-field input,:root[data-theme="dark"] .form-field select,:root[data-theme="dark"] .form-field textarea{background:rgba(255,255,255,.06);border-color:transparent}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--brass),0 0 0 4px color-mix(in srgb,var(--brass) 16%,transparent)}
+.submit-btn{background:linear-gradient(180deg,#4a82f5,#1f62e8);border-radius:999px;box-shadow:0 8px 20px rgba(31,98,232,.32)}
+.submit-btn:hover{filter:brightness(1.06)}
+.auth-visual{background:var(--grad-brand)}
+.auth-visual .brand{color:#fff}
+.auth-visual .brand-mark{background:#fff;color:var(--navy);box-shadow:none}
+
+/* التذييل */
+footer{background:var(--grad-brand);border-radius:36px 36px 0 0}
+.foot-cta{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:20px}
+.foot-cta .btn-solid{background:#fff;color:var(--navy);box-shadow:none}
+.foot-cta .btn-solid:hover{background:#e6edf7}
+.foot-brand,footer .brand{color:#fff}
+
+/* وسوم */
+.chip-ok{background:#e1f5ec;color:#17915f}
+.chip-danger{background:#fde8ea;color:#c02a3c}
+.chip-warn{background:#fff3cd;color:#7a5b00}
+.chip-neutral{background:#e9edf3;color:var(--ink-soft)}
+:root[data-theme="dark"] .chip-ok{background:#12372b}:root[data-theme="dark"] .chip-danger{background:#3a1820}:root[data-theme="dark"] .chip-warn{background:#3a3010}:root[data-theme="dark"] .chip-neutral{background:#222c40}
+
+/* لوحة الإدارة */
+.admin-shell{--admin-navy:#24489a;--admin-navy-light:#152f6e;--admin-accent:#5d8cf5;--admin-accent-deep:#4b6fe8;--admin-navy-text:rgba(255,255,255,.85);--admin-navy-text-dim:rgba(255,255,255,.55);--admin-blue:#3d8bff;--admin-orange:#f08c00;--admin-green:#22b07d;--admin-purple:#7c8cf8}
+.admin-sidebar{background:linear-gradient(170deg,#24489a,#152f6e);border:0;border-radius:24px;box-shadow:0 18px 40px rgba(21,47,110,.35)}
+.admin-sidebar-brand-mark{background:#fff;color:var(--navy)}
+.admin-nav button{border-radius:12px}
+.admin-nav button.active{background:linear-gradient(90deg,#5d8cf5,#4b6fe8);color:#fff;box-shadow:0 6px 16px rgba(40,60,200,.35)}
+.admin-logout-btn{color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.3);background:transparent}
+.admin-logout-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.admin-badge{background:var(--navy);color:#fff;border-color:var(--navy)}
+.admin-section h2{font-size:19px;font-weight:700}
+.admin-table th{background:transparent;color:var(--ink-soft);font-size:12px;font-weight:600;border-bottom:1px solid var(--line)}
+.admin-table td{border-bottom:1px solid var(--line)}
+.admin-table tr:hover td{background:rgba(31,98,232,.05)}
+.admin-stat-tile{color:var(--ink)}
+.admin-stat-value{font-weight:500;font-size:24px}
+.admin-stat-icon{border-radius:50%}
+.admin-search{border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.7)}
+:root[data-theme="dark"] .admin-search{background:rgba(255,255,255,.06);color:var(--ink)}
+@media (max-width:880px){header,.listing-header{border-radius:0}}
+.listing-header .brand,.listing-header .header-user-name{color:var(--ink)}
+.listing-header .btn-ghost{color:var(--navy);border-color:rgba(27,58,122,.35)}
+:root[data-theme="dark"] .listing-header .btn-ghost{color:var(--ink);border-color:rgba(255,255,255,.3)}
+.listing-header .btn-ghost:hover{background:var(--navy);color:#fff}
+.listing-header .admin-badge{background:var(--navy);color:#fff}
+.section-head{margin-top:30px}
+.detail-info,.detail-gallery,.contact-panel,.reviews-panel{border-radius:24px}
+.detail-info{background:var(--glass-bg);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 1px 0 rgba(255,255,255,.9)}
+.detail-gallery{overflow:hidden;background:var(--glass-bg);border:1px solid var(--glass-border)}
+
+/* الخط العربي: Noto Naskh Arabic لكل النصوص والعناوين (الإنجليزية تبقى Poppins عبر html[lang=en]) */
+h1,h2,h3,h4,.brand,.brand-mark,.foot-brand,.auth-visual .brand,button,input,select,textarea{font-family:'Noto Naskh Arabic','IBM Plex Sans Arabic',serif}
+html[lang="en"] button,html[lang="en"] input,html[lang="en"] select,html[lang="en"] textarea{font-family:'Poppins','Inter',sans-serif}
+body{line-height:1.85}

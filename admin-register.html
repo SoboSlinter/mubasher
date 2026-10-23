@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="meta.adminRegister.title">تسجيل مدير جديد | مباشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+</head>
+<body class="listing-page admin-page">
+
+<header class="listing-header">
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark" id="brandAvatar">م</span> <span data-i18n="brand.name">مباشر</span> <span class="admin-badge" data-i18n="admin.badge">الإدارة</span></div>
+    <div class="listing-header-actions">
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+      <a class="btn btn-ghost" href="index.html" data-i18n="auth.backHomeShort">العودة إلى الرئيسية</a>
+    </div>
+  </div>
+</header>
+
+<main class="listing-main">
+  <div class="wrap">
+    <div class="listing-form-card auth-required-notice" id="adminRegisterGate" style="max-width:640px; margin:0 auto;">
+      <h2 data-i18n="admin.registerNewAdmin.heading">تسجيل مدير جديد</h2>
+      <p class="admin-note" data-i18n="admin.registerNewAdmin.note">هذه العملية متاحة فقط للمدير العام (Super Admin). أدخل بيانات المدير العام أدناه لتفويض العملية، ثم بيانات المدير الجديد ونوع صلاحياته.</p>
+      <p class="admin-note" id="adminRegisterBypassNotice" style="display:none; border-color:#b3423a; color:#b3423a;" data-i18n="admin.registerNewAdmin.bypassNotice">⚠️ وضع استرجاع مؤقت: تفويض المدير العام معطّل حاليًا، والحساب الذي ستنشئه أدناه سيُمنح صلاحية "مدير عام" كاملة مباشرة. أعد تفعيل التفويض في الكود بعد استرجاع وصولك.</p>
+
+      <div class="form-status" id="adminRegisterStatus"></div>
+
+      <div class="form-section-title" data-i18n="admin.registerNewAdmin.authorizerTitle">بيانات المدير العام (للتفويض)</div>
+      <div class="form-field" id="authorizerEmailField">
+        <label for="authorizerEmail" data-i18n="field.email">البريد الإلكتروني</label>
+        <input type="email" id="authorizerEmail" autocomplete="off">
+        <span class="error-msg" data-i18n="admin.registerNewAdmin.authorizerError">بيانات المدير العام غير صحيحة، أو الحساب لا يملك صلاحية المدير العام</span>
+      </div>
+      <div class="form-field" id="authorizerPasswordField">
+        <label for="authorizerPassword" data-i18n="field.password">كلمة المرور</label>
+        <input type="password" id="authorizerPassword" autocomplete="off">
+      </div>
+
+      <div class="form-section-title" data-i18n="admin.registerNewAdmin.newAdminTitle">بيانات المدير الجديد</div>
+      <div class="form-field" id="newAdminNameField">
+        <label for="newAdminName" data-i18n="field.fullName">الاسم الكامل</label>
+        <input type="text" id="newAdminName">
+        <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+      </div>
+      <div class="form-field" id="newAdminEmailField">
+        <label for="newAdminEmail" data-i18n="field.email">البريد الإلكتروني</label>
+        <input type="email" id="newAdminEmail">
+        <span class="error-msg" id="newAdminEmailFormatMsg" data-i18n="error.email">الرجاء إدخال بريد إلكتروني صحيح</span>
+        <span class="error-msg" id="newAdminEmailExistsMsg" data-i18n="auth.emailExists">هذا البريد الإلكتروني مسجّل بالفعل</span>
+      </div>
+      <div class="form-field" id="newAdminPhoneField">
+        <label for="newAdminPhone" data-i18n="field.phone">رقم الجوال</label>
+        <input type="tel" id="newAdminPhone" placeholder="09xxxxxxxx">
+        <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+      </div>
+      <div class="form-field" id="newAdminPasswordField">
+        <label for="newAdminPassword" data-i18n="field.password">كلمة المرور</label>
+        <input type="password" id="newAdminPassword">
+        <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+      </div>
+      <div class="form-field" id="newAdminConfirmPasswordField">
+        <label for="newAdminConfirmPassword" data-i18n="field.confirmPassword">تأكيد كلمة المرور</label>
+        <input type="password" id="newAdminConfirmPassword">
+        <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+      </div>
+
+      <div class="auth-required-actions">
+        <button type="button" class="btn btn-solid" id="submitAdminRegisterBtn" data-i18n="admin.registerNewAdmin.submitBtn">تسجيل المدير الجديد</button>
+        <a class="btn btn-ghost" href="admin-login.html" data-i18n="admin.registerNewAdmin.backBtn">العودة لتسجيل الدخول</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

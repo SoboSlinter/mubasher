@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="meta.listingDetail.title">تفاصيل الإعلان | مباشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+</head>
+<body class="listing-page">
+
+<header class="listing-header">
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark" id="brandAvatar">م</span> <span data-i18n="brand.name">مباشر</span></div>
+    <div class="listing-header-actions">
+      <div class="header-user-badge" id="headerUserBadge">
+        <span class="header-user-avatar" id="headerUserAvatar">م</span>
+        <span class="header-user-name" id="headerUserName"></span>
+      </div>
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+      <a class="btn btn-ghost" href="admin.html" id="navAdminPanelLink" data-i18n="nav.adminPanel" style="display:none;">لوحة التحكم</a>
+      <a class="btn btn-ghost" href="index.html" data-i18n="auth.backHomeShort">العودة إلى الرئيسية</a>
+    </div>
+  </div>
+</header>
+
+<main class="listing-main" id="listingDetailRoot">
+  <div class="wrap">
+
+    <div class="listing-form-card" id="listingNotFound" style="display:none;">
+      <h1 data-i18n="listingPage.notFoundTitle">الإعلان غير موجود</h1>
+      <p data-i18n="listingPage.notFoundBody">قد يكون هذا الإعلان قد حُذف أو أن الرابط غير صحيح.</p>
+      <a class="btn btn-solid" href="index.html" data-i18n="listingPage.detailBack">← رجوع لكل الإعلانات</a>
+    </div>
+
+    <div class="listing-intro">
+      <a class="see-all" href="index.html" data-i18n="listingPage.detailBack">← رجوع لكل الإعلانات</a>
+    </div>
+
+    <div class="detail-layout" id="listingDetailContent">
+
+      <div class="detail-gallery">
+        <img id="mainPhoto" alt="" class="main-photo">
+        <div class="no-photo-placeholder" id="noPhotoPlaceholder" data-i18n="listingPage.galleryNoPhotos" style="display:none;">لا توجد صور مرفقة لهذا الإعلان</div>
+        <div class="thumb-strip" id="thumbStrip"></div>
+      </div>
+
+      <div class="detail-info">
+        <div class="hidden-by-admin-notice" id="hiddenByAdminNotice" data-i18n="listingPage.hiddenByAdminNotice" style="display:none;">تم إخفاء هذا الإعلان من قبل إدارة المنصة، ولا يظهر للمستخدمين الآخرين.</div>
+        <span class="badge sale detail-category" id="detailCategory"></span>
+        <span class="badge badge-sold detail-sold-badge" id="detailSoldBadge" style="display:none;"></span>
+        <span class="badge badge-featured detail-featured-badge" id="detailFeaturedBadge" style="display:none;"></span>
+        <button type="button" class="detail-favorite-btn" id="detailFavoriteBtn" style="display:none;">♡</button>
+        <div class="detail-price" id="detailPrice"></div>
+        <h1 class="detail-title" id="detailTitle"></h1>
+        <div class="detail-loc" id="detailLoc"></div>
+        <span class="verified-seller-badge verified-seller-badge-detail" id="detailVerifiedBadge" style="display:none;"></span>
+        <div class="seller-rating-summary" id="sellerRatingSummary"></div>
+
+        <div class="detail-specs" id="detailSpecs"></div>
+
+        <div class="form-section-title" data-i18n="listingPage.descTitle">وصف الإعلان</div>
+        <p class="detail-description" id="detailDescription"></p>
+
+        <div class="contact-panel">
+          <div class="form-section-title" data-i18n="listingPage.sendMessageBtn">إرسال الرسالة</div>
+
+          <p class="contact-note" id="ownAdNote" data-i18n="listingPage.ownAdNote" style="display:none;">هذا إعلانك الخاص. يمكنك متابعة الرسائل الواردة بخصوصه من صفحة رسائلي.</p>
+
+          <div class="contact-note" id="loginToMessage" style="display:none;">
+            <p data-i18n="listingPage.loginToMessagePrompt">يجب تسجيل الدخول للتواصل مع صاحب الإعلان.</p>
+            <div class="auth-required-actions">
+              <a class="btn btn-solid" href="login.html" data-i18n="auth.login">تسجيل الدخول</a>
+              <a class="btn btn-ghost" href="signup.html" data-i18n="auth.signup">إنشاء حساب</a>
+            </div>
+          </div>
+
+          <div id="messageFormWrap" style="display:none;">
+            <div class="thread-messages" id="threadMessages"></div>
+            <form id="messageForm">
+              <div class="form-field">
+                <textarea id="messageText" data-i18n-placeholder="listingPage.messagePlaceholder" placeholder="اكتب رسالتك لصاحب الإعلان هنا..."></textarea>
+              </div>
+              <div class="contact-leak-warning" id="messageContactWarning" data-i18n="messages.contactLeakWarning">لا يمكن تضمين رقم جوال أو بريد إلكتروني أو حساب تواصل اجتماعي أو رابط ضمن الرسائل، حفاظًا على خصوصيتك وأمانك. يرجى إبقاء التواصل داخل نظام رسائل الموقع.</div>
+              <button type="submit" class="btn btn-solid" data-i18n="listingPage.sendMessageBtn">إرسال الرسالة</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="report-panel" id="reportPanel">
+          <a href="#" id="reportListingLink" class="report-link" data-i18n="listingPage.reportLink">الإبلاغ عن هذا الإعلان</a>
+          <div id="reportFormWrap" style="display:none;">
+            <div class="form-field" id="reportReasonField">
+              <label for="reportReason" data-i18n="listingPage.reportReasonLabel">سبب الإبلاغ</label>
+              <select id="reportReason">
+                <option value="misleading" data-i18n="listingPage.reportReason.misleading">معلومات مضللة</option>
+                <option value="duplicate" data-i18n="listingPage.reportReason.duplicate">إعلان مكرر</option>
+                <option value="soldElsewhere" data-i18n="listingPage.reportReason.soldElsewhere">تم البيع في مكان آخر</option>
+                <option value="inappropriate" data-i18n="listingPage.reportReason.inappropriate">محتوى غير لائق</option>
+                <option value="other" data-i18n="listingPage.reportReason.other">أخرى</option>
+              </select>
+            </div>
+            <div class="form-field" id="reportDetailsField">
+              <label for="reportDetails" data-i18n="listingPage.reportDetailsLabel">تفاصيل إضافية (اختياري)</label>
+              <textarea id="reportDetails"></textarea>
+            </div>
+            <button type="button" class="btn btn-ghost" id="submitReportBtn" data-i18n="listingPage.reportSubmitBtn">إرسال البلاغ</button>
+          </div>
+        </div>
+
+        <div class="reviews-panel" id="reviewsPanel" style="display:none;">
+          <div class="form-section-title" data-i18n="reviews.heading">تقييمات ومراجعات البائع</div>
+          <div id="reviewsList"></div>
+
+          <div id="reviewFormWrap" style="display:none;">
+            <div class="form-field">
+              <label data-i18n="reviews.yourRating">تقييمك</label>
+              <div class="star-rating-input" id="reviewStarInput">
+                <span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="reviewComment" data-i18n="reviews.commentLabel">تعليقك (اختياري)</label>
+              <textarea id="reviewComment"></textarea>
+            </div>
+            <button type="button" class="btn btn-solid" id="submitReviewBtn" data-i18n="reviews.submitBtn">إرسال التقييم</button>
+          </div>
+          <p class="contact-note" id="reviewLoginNote" style="display:none;">
+            <span data-i18n="reviews.loginToReview">يجب تسجيل الدخول لإضافة تقييم.</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <button type="button" class="modal-close" id="closeProfile" data-i18n-aria-label="profile.closeBtnLabel">×</button>
+    <h3 data-i18n="profile.title">الملف الشخصي</h3>
+
+    <div class="profile-photo-row">
+      <div class="profile-photo-preview" id="profilePhotoPreview">م</div>
+      <div>
+        <label class="btn btn-ghost profile-photo-btn" for="profilePhotoInput" data-i18n="profile.changePhotoBtn">تغيير الصورة</label>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+      </div>
+    </div>
+    <div class="profile-account-info">
+      <div class="profile-info-email" id="profileEmail"></div>
+    </div>
+
+    <div class="form-status" id="profileStatus"></div>
+
+    <div class="form-field" id="profileNameField">
+      <label for="profileNameInput" data-i18n="profile.nameLabel">الاسم الكامل</label>
+      <input type="text" id="profileNameInput" data-i18n-placeholder="field.fullName" placeholder="الاسم الكامل">
+      <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+    </div>
+    <div class="form-field" id="profilePhoneField">
+      <label for="profilePhoneInput" data-i18n="profile.phoneLabel">رقم الجوال</label>
+      <input type="tel" id="profilePhoneInput" placeholder="09xxxxxxxx">
+      <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+    </div>
+    <div class="form-field" id="profileAddressField">
+      <label for="profileAddress" data-i18n="profile.addressLabel">العنوان</label>
+      <input type="text" id="profileAddress" data-i18n-placeholder="profile.addressPlaceholder" placeholder="أدخل عنوانك">
+    </div>
+    <div class="form-field" id="profileUsernameField" style="display:none;">
+      <label for="profileUsernameInput" data-i18n="profile.usernameLabel">اسم المستخدم (لتسجيل دخول الإدارة)</label>
+      <input type="text" id="profileUsernameInput" data-i18n-placeholder="profile.usernamePlaceholder" placeholder="مثال: mohamed_ahmed" autocomplete="off">
+      <span class="error-msg" id="profileUsernameFormatMsg" data-i18n="profile.usernameFormatError">3 إلى 20 حرفًا: أحرف إنجليزية أو أرقام أو _ أو . فقط</span>
+      <span class="error-msg" id="profileUsernameTakenMsg" data-i18n="profile.usernameTakenError">اسم المستخدم هذا مُستخدَم بالفعل</span>
+      <p class="hint" data-i18n="profile.usernameHint">يمكنك استخدام اسم المستخدم هذا بدلاً من بريدك الإلكتروني لتسجيل الدخول من صفحة دخول الإدارة.</p>
+    </div>
+    <button type="button" class="btn btn-solid" id="saveProfileInfoBtn" data-i18n="profile.saveInfoBtn" style="width:100%; margin-bottom:22px;">حفظ البيانات</button>
+
+    <div class="form-section-title" data-i18n="profile.changePasswordTitle" style="margin-top:0;">تغيير كلمة المرور</div>
+    <div class="form-field" id="currentPasswordField">
+      <label for="currentPassword" data-i18n="profile.currentPasswordLabel">كلمة المرور الحالية</label>
+      <input type="password" id="currentPassword">
+      <span class="error-msg" data-i18n="profile.currentPasswordError">كلمة المرور الحالية غير صحيحة</span>
+    </div>
+    <div class="form-field" id="newPasswordProfileField">
+      <label for="newPasswordProfile" data-i18n="profile.newPasswordLabel">كلمة المرور الجديدة</label>
+      <input type="password" id="newPasswordProfile">
+      <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+    </div>
+    <div class="form-field" id="confirmNewPasswordProfileField">
+      <label for="confirmNewPasswordProfile" data-i18n="profile.confirmNewPasswordLabel">تأكيد كلمة المرور الجديدة</label>
+      <input type="password" id="confirmNewPasswordProfile">
+      <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+    </div>
+    <button type="button" class="btn btn-solid" id="savePasswordBtn" data-i18n="profile.savePasswordBtn" style="width:100%;">تحديث كلمة المرور</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

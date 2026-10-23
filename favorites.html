@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="meta.favorites.title">المفضلة | مباشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+</head>
+<body class="listing-page">
+
+<header class="listing-header">
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark" id="brandAvatar">م</span> <span data-i18n="brand.name">مباشر</span></div>
+    <div class="listing-header-actions">
+      <div class="header-user-badge" id="headerUserBadge">
+        <span class="header-user-avatar" id="headerUserAvatar">م</span>
+        <span class="header-user-name" id="headerUserName"></span>
+      </div>
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+      <a class="btn btn-ghost" href="admin.html" id="navAdminPanelLink" data-i18n="nav.adminPanel" style="display:none;">لوحة التحكم</a>
+      <a class="btn btn-ghost" href="index.html" data-i18n="auth.backHomeShort">العودة إلى الرئيسية</a>
+    </div>
+  </div>
+</header>
+
+<main class="listing-main" id="favoritesRoot">
+  <div class="wrap">
+    <div class="listing-intro">
+      <h1 data-i18n="favorites.heading">إعلاناتي المفضلة</h1>
+      <p data-i18n="favorites.sub">الإعلانات التي حفظتها لمتابعتها لاحقًا.</p>
+    </div>
+
+    <div class="listing-form-card" id="favoritesLoginNotice" style="display:none;">
+      <p data-i18n="favorites.loginNotice">يجب تسجيل الدخول لعرض قائمة المفضلة.</p>
+      <div class="auth-required-actions">
+        <a class="btn btn-solid" href="login.html" data-i18n="auth.login">تسجيل الدخول</a>
+        <a class="btn btn-ghost" href="signup.html" data-i18n="auth.signup">إنشاء حساب</a>
+      </div>
+    </div>
+
+    <div class="listing-form-card" id="favoritesEmptyState" style="display:none;">
+      <p data-i18n="favorites.empty">لم تُضف أي إعلانات إلى المفضلة بعد.</p>
+      <a class="btn btn-solid" href="index.html" data-i18n="listingPage.detailBack">← رجوع لكل الإعلانات</a>
+    </div>
+
+    <div class="grid" id="favoritesGrid"></div>
+
+    <div class="section-head" style="margin-top:40px;">
+      <div>
+        <h2 data-i18n="savedSearch.sectionTitle">عمليات البحث المحفوظة</h2>
+      </div>
+    </div>
+    <div class="listing-form-card" id="savedSearchesEmptyState" style="display:none;">
+      <p data-i18n="savedSearch.emptyState">لا توجد عمليات بحث محفوظة بعد. من الصفحة الرئيسية، اضبط فلاتر البحث واضغط «حفظ هذا البحث».</p>
+    </div>
+    <div class="saved-searches-list" id="savedSearchesList"></div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <button type="button" class="modal-close" id="closeProfile" data-i18n-aria-label="profile.closeBtnLabel">×</button>
+    <h3 data-i18n="profile.title">الملف الشخصي</h3>
+
+    <div class="profile-photo-row">
+      <div class="profile-photo-preview" id="profilePhotoPreview">م</div>
+      <div>
+        <label class="btn btn-ghost profile-photo-btn" for="profilePhotoInput" data-i18n="profile.changePhotoBtn">تغيير الصورة</label>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+      </div>
+    </div>
+    <div class="profile-account-info">
+      <div class="profile-info-email" id="profileEmail"></div>
+    </div>
+
+    <div class="form-status" id="profileStatus"></div>
+
+    <div class="form-field" id="profileNameField">
+      <label for="profileNameInput" data-i18n="profile.nameLabel">الاسم الكامل</label>
+      <input type="text" id="profileNameInput" data-i18n-placeholder="field.fullName" placeholder="الاسم الكامل">
+      <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+    </div>
+    <div class="form-field" id="profilePhoneField">
+      <label for="profilePhoneInput" data-i18n="profile.phoneLabel">رقم الجوال</label>
+      <input type="tel" id="profilePhoneInput" placeholder="09xxxxxxxx">
+      <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+    </div>
+    <div class="form-field" id="profileAddressField">
+      <label for="profileAddress" data-i18n="profile.addressLabel">العنوان</label>
+      <input type="text" id="profileAddress" data-i18n-placeholder="profile.addressPlaceholder" placeholder="أدخل عنوانك">
+    </div>
+    <div class="form-field" id="profileUsernameField" style="display:none;">
+      <label for="profileUsernameInput" data-i18n="profile.usernameLabel">اسم المستخدم (لتسجيل دخول الإدارة)</label>
+      <input type="text" id="profileUsernameInput" data-i18n-placeholder="profile.usernamePlaceholder" placeholder="مثال: mohamed_ahmed" autocomplete="off">
+      <span class="error-msg" id="profileUsernameFormatMsg" data-i18n="profile.usernameFormatError">3 إلى 20 حرفًا: أحرف إنجليزية أو أرقام أو _ أو . فقط</span>
+      <span class="error-msg" id="profileUsernameTakenMsg" data-i18n="profile.usernameTakenError">اسم المستخدم هذا مُستخدَم بالفعل</span>
+      <p class="hint" data-i18n="profile.usernameHint">يمكنك استخدام اسم المستخدم هذا بدلاً من بريدك الإلكتروني لتسجيل الدخول من صفحة دخول الإدارة.</p>
+    </div>
+    <button type="button" class="btn btn-solid" id="saveProfileInfoBtn" data-i18n="profile.saveInfoBtn" style="width:100%; margin-bottom:22px;">حفظ البيانات</button>
+
+    <div class="form-section-title" data-i18n="profile.changePasswordTitle" style="margin-top:0;">تغيير كلمة المرور</div>
+    <div class="form-field" id="currentPasswordField">
+      <label for="currentPassword" data-i18n="profile.currentPasswordLabel">كلمة المرور الحالية</label>
+      <input type="password" id="currentPassword">
+      <span class="error-msg" data-i18n="profile.currentPasswordError">كلمة المرور الحالية غير صحيحة</span>
+    </div>
+    <div class="form-field" id="newPasswordProfileField">
+      <label for="newPasswordProfile" data-i18n="profile.newPasswordLabel">كلمة المرور الجديدة</label>
+      <input type="password" id="newPasswordProfile">
+      <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+    </div>
+    <div class="form-field" id="confirmNewPasswordProfileField">
+      <label for="confirmNewPasswordProfile" data-i18n="profile.confirmNewPasswordLabel">تأكيد كلمة المرور الجديدة</label>
+      <input type="password" id="confirmNewPasswordProfile">
+      <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+    </div>
+    <button type="button" class="btn btn-solid" id="savePasswordBtn" data-i18n="profile.savePasswordBtn" style="width:100%;">تحديث كلمة المرور</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

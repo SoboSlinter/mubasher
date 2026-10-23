@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="meta.listing.title">أضف إعلانك | مباشر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+</head>
+<body class="listing-page">
+
+<header class="listing-header">
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark" id="brandAvatar">م</span> <span data-i18n="brand.name">مباشر</span></div>
+    <div class="listing-header-actions">
+      <div class="header-user-badge" id="headerUserBadge">
+        <span class="header-user-avatar" id="headerUserAvatar">م</span>
+        <span class="header-user-name" id="headerUserName"></span>
+      </div>
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+      <a class="btn btn-ghost" href="admin.html" id="navAdminPanelLink" data-i18n="nav.adminPanel" style="display:none;">لوحة التحكم</a>
+      <a class="btn btn-ghost" href="index.html" data-i18n="auth.backHomeShort">العودة إلى الرئيسية</a>
+    </div>
+  </div>
+</header>
+
+<main class="listing-main">
+  <div class="wrap">
+    <div class="listing-intro">
+      <h1 data-i18n="listingPage.heading">أضف إعلانك</h1>
+      <p data-i18n="listingPage.sub">اختر نوع ما تعرضه، وأدخل التفاصيل. جميع الأسعار بالجنيه السوداني.</p>
+    </div>
+
+    <!-- يظهر فقط للزائر غير المسجّل دخوله -->
+    <div class="listing-form-card auth-required-notice" id="authRequiredNotice" style="display:none;">
+      <p data-i18n="listingPage.authRequired">يجب تسجيل الدخول لنشر إعلان على المنصة.</p>
+      <div class="auth-required-actions">
+        <a class="btn btn-solid" href="login.html" data-i18n="auth.login">تسجيل الدخول</a>
+        <a class="btn btn-ghost" href="signup.html" data-i18n="auth.signup">إنشاء حساب</a>
+      </div>
+    </div>
+
+    <!-- يظهر عندما يكون الحساب غير مفعّل بعد (بانتظار المراجعة أو انتهت التجربة) -->
+    <div class="listing-form-card auth-required-notice" id="subscriptionRequiredNotice" style="display:none;">
+      <p id="subscriptionRequiredMessage"></p>
+      <div class="auth-required-actions">
+        <a class="btn btn-solid" href="subscription.html" data-i18n="subscription.goToSubscriptionBtn">إدارة الاشتراك</a>
+      </div>
+    </div>
+
+    <div class="listing-form-card" id="listingFormCard">
+      <div class="form-status" id="formStatus"></div>
+
+      <form id="listingForm" novalidate>
+
+        <div class="form-section-title" data-i18n="listingPage.categoryTitle">نوع الإعلان</div>
+        <div class="category-picker" id="categoryPicker">
+          <div class="category-option" data-category="land"><span class="cat-emoji">▦</span><span data-i18n="listingPage.cat.land">قطعة أرض</span></div>
+          <div class="category-option" data-category="residential"><span class="cat-emoji">⌂</span><span data-i18n="listingPage.cat.residential">عقار سكني</span></div>
+          <div class="category-option" data-category="commercial"><span class="cat-emoji">🏢</span><span data-i18n="listingPage.cat.commercial">عقار تجاري</span></div>
+          <div class="category-option" data-category="car"><span class="cat-emoji">🚗</span><span data-i18n="listingPage.cat.car">سيارة</span></div>
+          <div class="category-option" data-category="motorcycle"><span class="cat-emoji">🏍</span><span data-i18n="listingPage.cat.motorcycle">دراجة نارية</span></div>
+        </div>
+        <div class="form-field" id="categoryField" style="margin-top:-14px; margin-bottom:26px;">
+          <span class="error-msg" data-i18n="listingPage.categoryError">الرجاء اختيار نوع الإعلان</span>
+        </div>
+
+        <!-- كل الحقول التالية تظهر فقط بعد اختيار نوع الإعلان -->
+        <div class="listing-details" id="detailsWrapper">
+
+          <div class="form-section-title" data-i18n="listingPage.detailsTitle">بيانات الإعلان</div>
+          <div class="form-grid-2">
+            <div class="form-field" id="offerTypeField">
+              <label for="offerType" data-i18n="search.offerType.label">نوع العرض</label>
+              <select id="offerType">
+                <option value="" data-i18n="field.choose">اختر...</option>
+                <option value="sale" data-i18n="offer.sale">للبيع</option>
+                <option value="rent" data-i18n="offer.rent">للإيجار</option>
+              </select>
+              <span class="error-msg" data-i18n="listingPage.offerTypeError">الرجاء اختيار نوع العرض</span>
+            </div>
+            <div class="form-field" id="priceField">
+              <label for="price" data-i18n="listingPage.priceLabel">السعر (بالجنيه السوداني)</label>
+              <input type="text" inputmode="numeric" id="price" placeholder="2,500,000">
+              <span class="error-msg" data-i18n="listingPage.priceError">الرجاء إدخال سعر صحيح</span>
+            </div>
+            <div class="form-field" id="cityField" style="grid-column:1 / -1;">
+              <label for="city" data-i18n="search.city.label">المدينة</label>
+              <select id="city">
+                <option value="" data-i18n="listingPage.cityChoose">اختر المدينة...</option>
+                <option value="khartoum" data-i18n="city.khartoum">الخرطوم</option>
+                <option value="omdurman" data-i18n="city.omdurman">أم درمان</option>
+                <option value="bahri" data-i18n="city.bahri">بحري</option>
+                <option value="madani" data-i18n="city.madani">مدني</option>
+                <option value="portsudan" data-i18n="city.portsudan">بورتسودان</option>
+                <option value="kassala" data-i18n="city.kassala">كسلا</option>
+                <option value="elobeid" data-i18n="city.elobeid">الأبيض</option>
+                <option value="nyala" data-i18n="city.nyala">نيالا</option>
+                <option value="elfasher" data-i18n="city.elfasher">الفاشر</option>
+                <option value="elgeneina" data-i18n="city.elgeneina">الجنينة</option>
+                <option value="kosti" data-i18n="city.kosti">كوستي</option>
+                <option value="sennar" data-i18n="city.sennar">سنار</option>
+                <option value="eddamazin" data-i18n="city.eddamazin">الدمازين</option>
+                <option value="atbara" data-i18n="city.atbara">عطبرة</option>
+                <option value="dongola" data-i18n="city.dongola">دنقلا</option>
+                <option value="gadarif" data-i18n="city.gadarif">القضارف</option>
+                <option value="shendi" data-i18n="city.shendi">شندي</option>
+                <option value="kadugli" data-i18n="city.kadugli">كادقلي</option>
+                <option value="zalingei" data-i18n="city.zalingei">زالنجي</option>
+                <option value="eddamer" data-i18n="city.eddamer">الدامر</option>
+              </select>
+              <span class="error-msg" data-i18n="listingPage.cityError">الرجاء اختيار المدينة</span>
+            </div>
+          </div>
+
+          <!-- Land -->
+          <div class="field-group" id="group-land">
+            <div class="form-section-title" data-i18n="listingPage.landDetails">تفاصيل الأرض</div>
+            <div class="form-grid-2">
+              <div class="form-field" id="landAreaField">
+                <label for="landArea" data-i18n="listingPage.areaLabel">المساحة (م²)</label>
+                <input type="number" id="landArea" min="0" placeholder="500">
+                <span class="error-msg" data-i18n="listingPage.areaError">الرجاء إدخال المساحة</span>
+              </div>
+              <div class="form-field" id="landTypeField">
+                <label for="landType" data-i18n="listingPage.landTypeLabel">نوع الأرض</label>
+                <select id="landType">
+                  <option value="" data-i18n="field.choose">اختر...</option>
+                  <option value="residential" data-i18n="landType.residential">سكنية</option>
+                  <option value="commercial" data-i18n="landType.commercial">تجارية</option>
+                  <option value="agricultural" data-i18n="landType.agricultural">زراعية</option>
+                </select>
+                <span class="error-msg" data-i18n="listingPage.landTypeError">الرجاء اختيار نوع الأرض</span>
+              </div>
+              <div class="form-field" id="landAddressField" style="grid-column:1 / -1;">
+                <label for="landAddress" data-i18n="listingPage.addressLabel">العنوان</label>
+                <input type="text" id="landAddress" data-i18n-placeholder="listingPage.addressPlaceholder" placeholder="الحي، الشارع، أقرب علامة مميزة">
+                <span class="error-msg" data-i18n="listingPage.addressError">الرجاء إدخال العنوان</span>
+              </div>
+              <div class="form-field" id="landNumberField" style="grid-column:1 / -1;">
+                <label for="landNumber" data-i18n="listingPage.landNumberLabel">رقم قطعة الأرض</label>
+                <input type="text" id="landNumber" data-i18n-placeholder="listingPage.landNumberPlaceholder" placeholder="مثال: 1234/56">
+                <span class="error-msg" id="landNumberErrorMsg" data-i18n="listingPage.landNumberError">الرجاء إدخال رقم قطعة الأرض</span>
+                <span class="hint" data-i18n="listingPage.internalOnlyHintProperty">لن يظهر هذا الرقم للعملاء، ويُستخدم داخليًا فقط لمنع تكرار نشر نفس العقار أو قطعة الأرض أكثر من مرة.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Residential -->
+          <div class="field-group" id="group-residential">
+            <div class="form-section-title" data-i18n="listingPage.resDetails">تفاصيل العقار السكني</div>
+            <div class="form-grid-2">
+              <div class="form-field" id="resAreaField">
+                <label for="resArea" data-i18n="listingPage.areaLabel">المساحة (م²)</label>
+                <input type="number" id="resArea" min="0" placeholder="300">
+                <span class="error-msg" data-i18n="listingPage.areaError">الرجاء إدخال المساحة</span>
+              </div>
+              <div class="form-field" id="resRoomsField">
+                <label for="resRooms" data-i18n="listingPage.roomsLabel">عدد الغرف</label>
+                <input type="number" id="resRooms" min="0" placeholder="4">
+                <span class="error-msg" data-i18n="listingPage.roomsError">الرجاء إدخال عدد الغرف</span>
+              </div>
+              <div class="form-field" id="resBathsField">
+                <label for="resBaths" data-i18n="listingPage.bathsLabel">عدد الحمامات</label>
+                <input type="number" id="resBaths" min="0" placeholder="2">
+                <span class="error-msg" data-i18n="listingPage.bathsError">الرجاء إدخال عدد الحمامات</span>
+              </div>
+              <div class="form-field" id="resAddressField" style="grid-column:1 / -1;">
+                <label for="resAddress" data-i18n="listingPage.addressLabel">العنوان</label>
+                <input type="text" id="resAddress" data-i18n-placeholder="listingPage.addressPlaceholder" placeholder="الحي، الشارع، أقرب علامة مميزة">
+                <span class="error-msg" data-i18n="listingPage.addressError">الرجاء إدخال العنوان</span>
+              </div>
+              <div class="form-field" id="resNumberField" style="grid-column:1 / -1;">
+                <label for="resNumber" data-i18n="listingPage.propertyNumberLabel">رقم العقار</label>
+                <input type="text" id="resNumber" data-i18n-placeholder="listingPage.resNumberPlaceholder" placeholder="مثال: 4521">
+                <span class="error-msg" id="resNumberErrorMsg" data-i18n="listingPage.propertyNumberError">الرجاء إدخال رقم العقار</span>
+                <span class="hint" data-i18n="listingPage.internalOnlyHintProperty">لن يظهر هذا الرقم للعملاء، ويُستخدم داخليًا فقط لمنع تكرار نشر نفس العقار أو قطعة الأرض أكثر من مرة.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Commercial -->
+          <div class="field-group" id="group-commercial">
+            <div class="form-section-title" data-i18n="listingPage.comDetails">تفاصيل العقار التجاري</div>
+            <div class="form-grid-2">
+              <div class="form-field" id="comAreaField">
+                <label for="comArea" data-i18n="listingPage.areaLabel">المساحة (م²)</label>
+                <input type="number" id="comArea" min="0" placeholder="150">
+                <span class="error-msg" data-i18n="listingPage.areaError">الرجاء إدخال المساحة</span>
+              </div>
+              <div class="form-field" id="comTypeField">
+                <label for="comType" data-i18n="listingPage.comTypeLabel">نوع الاستخدام</label>
+                <select id="comType">
+                  <option value="" data-i18n="field.choose">اختر...</option>
+                  <option value="shop" data-i18n="comType.shop">محل تجاري</option>
+                  <option value="office" data-i18n="comType.office">مكتب</option>
+                  <option value="warehouse" data-i18n="comType.warehouse">مستودع</option>
+                  <option value="mall" data-i18n="comType.mall">مجمع تجاري</option>
+                </select>
+                <span class="error-msg" data-i18n="listingPage.comTypeError">الرجاء اختيار نوع الاستخدام</span>
+              </div>
+              <div class="form-field" id="comAddressField" style="grid-column:1 / -1;">
+                <label for="comAddress" data-i18n="listingPage.addressLabel">العنوان</label>
+                <input type="text" id="comAddress" data-i18n-placeholder="listingPage.addressPlaceholder" placeholder="الحي، الشارع، أقرب علامة مميزة">
+                <span class="error-msg" data-i18n="listingPage.addressError">الرجاء إدخال العنوان</span>
+              </div>
+              <div class="form-field" id="comNumberField" style="grid-column:1 / -1;">
+                <label for="comNumber" data-i18n="listingPage.propertyNumberLabel">رقم العقار</label>
+                <input type="text" id="comNumber" data-i18n-placeholder="listingPage.comNumberPlaceholder" placeholder="مثال: 7788">
+                <span class="error-msg" id="comNumberErrorMsg" data-i18n="listingPage.propertyNumberError">الرجاء إدخال رقم العقار</span>
+                <span class="hint" data-i18n="listingPage.internalOnlyHintProperty">لن يظهر هذا الرقم للعملاء، ويُستخدم داخليًا فقط لمنع تكرار نشر نفس العقار أو قطعة الأرض أكثر من مرة.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Car -->
+          <div class="field-group" id="group-car">
+            <div class="form-section-title" data-i18n="listingPage.carDetails">تفاصيل السيارة</div>
+            <div class="form-grid-2">
+              <div class="form-field" id="carBrandField">
+                <label for="carBrand" data-i18n="listingPage.brandLabel">شركة التصنيع</label>
+                <select id="carBrand"><option value="" data-i18n="listingPage.brandChoose">اختر الشركة...</option></select>
+                <span class="error-msg" data-i18n="listingPage.brandError">الرجاء اختيار شركة التصنيع</span>
+              </div>
+              <div class="form-field" id="carModelField">
+                <label for="carModel" data-i18n="listingPage.modelLabel">الموديل</label>
+                <select id="carModel"><option value="" data-i18n="listingPage.modelChooseBrandFirst">اختر الشركة أولاً</option></select>
+                <span class="error-msg" data-i18n="listingPage.modelError">الرجاء اختيار الموديل</span>
+              </div>
+              <div class="form-field" id="carYearField">
+                <label for="carYear" data-i18n="listingPage.yearLabel">سنة الصنع</label>
+                <select id="carYear"><option value="" data-i18n="listingPage.yearChoose">اختر السنة...</option></select>
+                <span class="error-msg" data-i18n="listingPage.yearError">الرجاء اختيار سنة الصنع</span>
+              </div>
+              <div class="form-field" id="carOdometerField">
+                <label for="carOdometer" data-i18n="listingPage.odometerLabel">عداد الكيلومترات (كم)</label>
+                <input type="text" inputmode="numeric" id="carOdometer" placeholder="45,000">
+                <span class="error-msg" data-i18n="listingPage.odometerError">الرجاء إدخال قراءة عداد الكيلومترات</span>
+              </div>
+              <div class="form-field" id="carRegistrationField" style="grid-column:1 / -1;">
+                <label for="carRegistration" data-i18n="listingPage.carRegistrationLabel">رقم استمارة السيارة</label>
+                <input type="text" id="carRegistration" data-i18n-placeholder="listingPage.carRegistrationPlaceholder" placeholder="مثال: KRT-778241">
+                <span class="error-msg" id="carRegistrationErrorMsg" data-i18n="listingPage.carRegistrationError">الرجاء إدخال رقم استمارة السيارة</span>
+                <span class="hint" data-i18n="listingPage.internalOnlyHintCar">لن يظهر هذا الرقم للعملاء، ويُستخدم داخليًا فقط لمنع تكرار نشر نفس السيارة أكثر من مرة.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Motorcycle -->
+          <div class="field-group" id="group-motorcycle">
+            <div class="form-section-title" data-i18n="listingPage.motoDetails">تفاصيل الدراجة النارية</div>
+            <div class="form-grid-2">
+              <div class="form-field" id="motoBrandField">
+                <label for="motoBrand" data-i18n="listingPage.brandLabel">شركة التصنيع</label>
+                <select id="motoBrand"><option value="" data-i18n="listingPage.brandChoose">اختر الشركة...</option></select>
+                <span class="error-msg" data-i18n="listingPage.brandError">الرجاء اختيار شركة التصنيع</span>
+              </div>
+              <div class="form-field" id="motoModelField">
+                <label for="motoModel" data-i18n="listingPage.modelLabel">الموديل</label>
+                <select id="motoModel"><option value="" data-i18n="listingPage.modelChooseBrandFirst">اختر الشركة أولاً</option></select>
+                <span class="error-msg" data-i18n="listingPage.modelError">الرجاء اختيار الموديل</span>
+              </div>
+              <div class="form-field" id="motoYearField">
+                <label for="motoYear" data-i18n="listingPage.yearLabel">سنة الصنع</label>
+                <select id="motoYear"><option value="" data-i18n="listingPage.yearChoose">اختر السنة...</option></select>
+                <span class="error-msg" data-i18n="listingPage.yearError">الرجاء اختيار سنة الصنع</span>
+              </div>
+              <div class="form-field" id="motoOdometerField">
+                <label for="motoOdometer" data-i18n="listingPage.odometerLabel">عداد الكيلومترات (كم)</label>
+                <input type="text" inputmode="numeric" id="motoOdometer" placeholder="8,000">
+                <span class="error-msg" data-i18n="listingPage.odometerError">الرجاء إدخال قراءة عداد الكيلومترات</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section-title" data-i18n="listingPage.photosTitle">الصور</div>
+          <div class="form-field" id="photosField">
+            <label for="photos" data-i18n="listingPage.photosLabelRequired">إرفاق صور</label>
+            <div class="dropzone" id="photosDropzone">
+              <div class="dropzone-icon">📷</div>
+              <div class="dropzone-text" data-i18n="listingPage.dropzoneText">اسحب الصور وأفلتها هنا، أو اضغط للاختيار من جهازك</div>
+              <input type="file" id="photos" accept="image/*" multiple>
+            </div>
+            <span class="error-msg" data-i18n="listingPage.photosError">الرجاء إرفاق صورة واحدة على الأقل</span>
+            <span class="hint" data-i18n="listingPage.photosHintRequired">يجب إرفاق صورة واحدة على الأقل لنشر الإعلان.</span>
+            <div id="selectedPhotosPreview" class="selected-photos-preview"></div>
+            <div id="currentPhotosPreview"></div>
+          </div>
+
+          <div class="form-section-title" data-i18n="listingPage.descTitle">وصف الإعلان</div>
+          <div class="form-field" id="descField">
+            <label for="description" data-i18n="listingPage.descLabel">وصف إضافي (اختياري)</label>
+            <textarea id="description" data-i18n-placeholder="listingPage.descPlaceholder" placeholder="أضف أي تفاصيل إضافية تساعد المهتمين، مثل الحالة، الإضافات، أو سبب البيع..."></textarea>
+            <span class="hint" data-i18n="listingPage.descHint">للسيارات والدراجات: اذكر حالة الفحص، المسافة المقطوعة، أو أي تعديلات.</span>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn" style="margin-top:10px;" data-i18n="listingPage.publishBtn">نشر الإعلان</button>
+
+        </div>
+        <!-- /detailsWrapper -->
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <button type="button" class="modal-close" id="closeProfile" data-i18n-aria-label="profile.closeBtnLabel">×</button>
+    <h3 data-i18n="profile.title">الملف الشخصي</h3>
+
+    <div class="profile-photo-row">
+      <div class="profile-photo-preview" id="profilePhotoPreview">م</div>
+      <div>
+        <label class="btn btn-ghost profile-photo-btn" for="profilePhotoInput" data-i18n="profile.changePhotoBtn">تغيير الصورة</label>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+      </div>
+    </div>
+    <div class="profile-account-info">
+      <div class="profile-info-email" id="profileEmail"></div>
+    </div>
+
+    <div class="form-status" id="profileStatus"></div>
+
+    <div class="form-field" id="profileNameField">
+      <label for="profileNameInput" data-i18n="profile.nameLabel">الاسم الكامل</label>
+      <input type="text" id="profileNameInput" data-i18n-placeholder="field.fullName" placeholder="الاسم الكامل">
+      <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+    </div>
+    <div class="form-field" id="profilePhoneField">
+      <label for="profilePhoneInput" data-i18n="profile.phoneLabel">رقم الجوال</label>
+      <input type="tel" id="profilePhoneInput" placeholder="09xxxxxxxx">
+      <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+    </div>
+    <div class="form-field" id="profileAddressField">
+      <label for="profileAddress" data-i18n="profile.addressLabel">العنوان</label>
+      <input type="text" id="profileAddress" data-i18n-placeholder="profile.addressPlaceholder" placeholder="أدخل عنوانك">
+    </div>
+    <div class="form-field" id="profileUsernameField" style="display:none;">
+      <label for="profileUsernameInput" data-i18n="profile.usernameLabel">اسم المستخدم (لتسجيل دخول الإدارة)</label>
+      <input type="text" id="profileUsernameInput" data-i18n-placeholder="profile.usernamePlaceholder" placeholder="مثال: mohamed_ahmed" autocomplete="off">
+      <span class="error-msg" id="profileUsernameFormatMsg" data-i18n="profile.usernameFormatError">3 إلى 20 حرفًا: أحرف إنجليزية أو أرقام أو _ أو . فقط</span>
+      <span class="error-msg" id="profileUsernameTakenMsg" data-i18n="profile.usernameTakenError">اسم المستخدم هذا مُستخدَم بالفعل</span>
+      <p class="hint" data-i18n="profile.usernameHint">يمكنك استخدام اسم المستخدم هذا بدلاً من بريدك الإلكتروني لتسجيل الدخول من صفحة دخول الإدارة.</p>
+    </div>
+    <button type="button" class="btn btn-solid" id="saveProfileInfoBtn" data-i18n="profile.saveInfoBtn" style="width:100%; margin-bottom:22px;">حفظ البيانات</button>
+
+    <div class="form-section-title" data-i18n="profile.changePasswordTitle" style="margin-top:0;">تغيير كلمة المرور</div>
+    <div class="form-field" id="currentPasswordField">
+      <label for="currentPassword" data-i18n="profile.currentPasswordLabel">كلمة المرور الحالية</label>
+      <input type="password" id="currentPassword">
+      <span class="error-msg" data-i18n="profile.currentPasswordError">كلمة المرور الحالية غير صحيحة</span>
+    </div>
+    <div class="form-field" id="newPasswordProfileField">
+      <label for="newPasswordProfile" data-i18n="profile.newPasswordLabel">كلمة المرور الجديدة</label>
+      <input type="password" id="newPasswordProfile">
+      <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+    </div>
+    <div class="form-field" id="confirmNewPasswordProfileField">
+      <label for="confirmNewPasswordProfile" data-i18n="profile.confirmNewPasswordLabel">تأكيد كلمة المرور الجديدة</label>
+      <input type="password" id="confirmNewPasswordProfile">
+      <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+    </div>
+    <button type="button" class="btn btn-solid" id="savePasswordBtn" data-i18n="profile.savePasswordBtn" style="width:100%;">تحديث كلمة المرور</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

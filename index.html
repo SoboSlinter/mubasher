@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  /* الصفحة الرئيسية لا تُفتح إلا لمن لديه جلسة تسجيل دخول نشطة — التحويل الفوري لصفحة
+     الدخول يمنع أي عرض للمحتوى قبل التحقق (سكربت محجوب يُنفَّذ قبل أي رسم للصفحة). */
+  (function () {
+    try {
+      if (!localStorage.getItem("eqari_session")) {
+        window.location.replace("login.html");
+      }
+    } catch (e) {}
+  })();
+</script>
+<title data-i18n-title="meta.home.title">مباشر | عقارات وسيارات للبيع والإيجار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#163731">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مباشر">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="frost.css">
+<link rel="stylesheet" href="leaflet.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <div class="brand"><span class="brand-mark" id="brandAvatar">م</span> <span data-i18n="brand.name">مباشر</span></div>
+    <form class="amazon-search-bar" id="headerSearchForm" role="search">
+      <select id="headerSearchCategory" data-i18n-aria-label="search.categoryAriaLabel" aria-label="اختر القسم">
+        <option value="residential" data-i18n="search.tab.realestate">عقارات</option>
+        <option value="land" data-i18n="search.tab.land">أراضي</option>
+        <option value="commercial" data-i18n="search.tab.commercial">تجارية</option>
+        <option value="car" data-i18n="search.tab.cars">سيارات</option>
+        <option value="motorcycle" data-i18n="search.tab.moto">دراجات نارية</option>
+      </select>
+      <input type="text" id="headerSearchKeyword" data-i18n-placeholder="search.keyword.placeholder" placeholder="ابحث بعنوان الإعلان...">
+      <button type="button" id="headerFiltersToggle" class="amazon-search-filters-btn" aria-expanded="false" aria-controls="advancedFiltersPanel" data-i18n-aria-label="search.filtersBtnAriaLabel" aria-label="فلاتر البحث" title="فلاتر البحث">⚙</button>
+      <button type="submit" id="headerSearchBtn" data-i18n-aria-label="search.cta" aria-label="ابحث الآن">🔍</button>
+    </form>
+    <div class="mobile-menu-panel" id="mobileMenuPanel">
+      <nav class="links">
+        <a href="#realestate" data-i18n="nav.realestate">عقارات</a>
+        <a href="#cars" data-i18n="nav.cars">سيارات</a>
+        <a href="add-listing.html" data-i18n="nav.addListing">أضف إعلانك</a>
+        <a href="my-listings.html" id="navMyListingsLink" data-i18n="nav.myListings" style="display:none;">إعلاناتي</a>
+        <a href="favorites.html" id="navFavoritesLink" data-i18n="nav.favorites" style="display:none;">المفضلة</a>
+        <a href="messages.html" id="navMessagesLink" style="display:none;"><span data-i18n="nav.messages">رسائلي</span><span class="unread-badge" id="unreadMessagesBadge" style="display:none;">0</span></a>
+        <a href="subscription.html" id="navSubscriptionLink" data-i18n="nav.subscription" style="display:none;">اشتراكي</a>
+        <a href="admin.html" id="navAdminPanelLink" data-i18n="nav.adminPanel" style="display:none;">لوحة التحكم</a>
+        <a href="#about" data-i18n="nav.about">من نحن</a>
+      </nav>
+      <div class="auth-actions" id="authActions">
+        <div class="header-user-badge" id="headerUserBadge">
+          <span class="header-user-avatar" id="headerUserAvatar">م</span>
+          <span class="header-user-name" id="headerUserName"></span>
+        </div>
+        <button type="button" class="btn btn-ghost lang-toggle" id="langToggle">EN</button>
+        <a class="btn btn-ghost" href="login.html" id="navLoginBtn" data-i18n="auth.login">تسجيل الدخول</a>
+        <a class="btn btn-solid" href="signup.html" id="navSignupBtn" data-i18n="auth.signup">إنشاء حساب</a>
+      </div>
+    </div>
+    <!-- أيقونتا الإشعارات والوضع الليلي ثابتتان دائمًا في أعلى الهيدر (خارج القائمة المنسدلة
+         للجوال)، بدل أن تُدفَنا داخل قائمة ☰ ولا تظهرا إلا بعد فتحها. -->
+    <div class="header-quick-actions" id="headerQuickActions">
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+    <button type="button" class="mobile-nav-toggle" id="mobileNavToggle" aria-label="فتح القائمة" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="maintenance-banner" id="maintenanceBanner" style="display:none;"></div>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow">منصة موثوقة للبيع والشراء</div>
+    <h1 data-i18n="hero.title">منزلك القادم، أو سيارتك التالية، في مكان واحد</h1>
+    <p data-i18n="hero.subtitle">آلاف الإعلانات المُحقّقة للعقارات والسيارات والأراضي، من أصحابها مباشرة أو عبر وسطاء معتمدين.</p>
+
+    <button type="button" class="advanced-filters-toggle" id="advancedFiltersToggle" aria-expanded="false" aria-controls="advancedFiltersPanel">
+      <span aria-hidden="true">⚙</span> <span data-i18n="search.advancedToggle">فلاتر متقدمة</span>
+    </button>
+
+    <div class="search-panel" id="advancedFiltersPanel" style="display:none;">
+      <div class="search-tabs" id="searchTabs">
+        <div class="search-tab active" data-cat="residential" data-i18n="search.tab.realestate">عقارات</div>
+        <div class="search-tab" data-cat="land" data-i18n="search.tab.land">أراضي</div>
+        <div class="search-tab" data-cat="commercial" data-i18n="search.tab.commercial">تجارية</div>
+        <div class="search-tab" data-cat="car" data-i18n="search.tab.cars">سيارات</div>
+        <div class="search-tab" data-cat="motorcycle" data-i18n="search.tab.moto">دراجات نارية</div>
+      </div>
+      <div class="field" style="grid-column:1 / -1;">
+        <label data-i18n="search.keyword.label">كلمة مفتاحية</label>
+        <input type="text" id="searchKeyword" data-i18n-placeholder="search.keyword.placeholder" placeholder="ابحث بعنوان الإعلان...">
+      </div>
+      <div class="field">
+        <label data-i18n="search.city.label">المدينة</label>
+        <select id="searchCity">
+          <option value="" data-i18n="search.any">الكل</option>
+          <option value="khartoum" data-i18n="city.khartoum">الخرطوم</option>
+          <option value="omdurman" data-i18n="city.omdurman">أم درمان</option>
+          <option value="bahri" data-i18n="city.bahri">بحري</option>
+          <option value="madani" data-i18n="city.madani">مدني</option>
+          <option value="portsudan" data-i18n="city.portsudan">بورتسودان</option>
+          <option value="kassala" data-i18n="city.kassala">كسلا</option>
+          <option value="elobeid" data-i18n="city.elobeid">الأبيض</option>
+          <option value="nyala" data-i18n="city.nyala">نيالا</option>
+          <option value="elfasher" data-i18n="city.elfasher">الفاشر</option>
+          <option value="elgeneina" data-i18n="city.elgeneina">الجنينة</option>
+          <option value="kosti" data-i18n="city.kosti">كوستي</option>
+          <option value="sennar" data-i18n="city.sennar">سنار</option>
+          <option value="eddamazin" data-i18n="city.eddamazin">الدمازين</option>
+          <option value="atbara" data-i18n="city.atbara">عطبرة</option>
+          <option value="dongola" data-i18n="city.dongola">دنقلا</option>
+          <option value="gadarif" data-i18n="city.gadarif">القضارف</option>
+          <option value="shendi" data-i18n="city.shendi">شندي</option>
+          <option value="kadugli" data-i18n="city.kadugli">كادقلي</option>
+          <option value="zalingei" data-i18n="city.zalingei">زالنجي</option>
+          <option value="eddamer" data-i18n="city.eddamer">الدامر</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="search.offerType.label">نوع العرض</label>
+        <select id="searchOfferType">
+          <option value="" data-i18n="search.any">الكل</option>
+          <option value="sale" data-i18n="offer.sale">للبيع</option>
+          <option value="rent" data-i18n="offer.rent">للإيجار</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="search.priceRange.label">نطاق السعر</label>
+        <div class="range-inputs">
+          <input type="number" min="0" id="searchPriceMin" data-i18n-placeholder="search.priceFrom" placeholder="من">
+          <input type="number" min="0" id="searchPriceMax" data-i18n-placeholder="search.priceTo" placeholder="إلى">
+        </div>
+      </div>
+      <div class="field" id="searchRoomsField">
+        <label data-i18n="search.rooms.label">عدد الغرف</label>
+        <select id="searchRooms">
+          <option value="" data-i18n="search.any">أي عدد</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+        </select>
+      </div>
+      <div class="field" id="searchYearField" style="display:none;">
+        <label data-i18n="search.yearRange.label">سنة الصنع</label>
+        <div class="range-inputs">
+          <select id="searchYearMin"></select>
+          <select id="searchYearMax"></select>
+        </div>
+      </div>
+      <div class="field" id="searchLandTypeField" style="display:none;">
+        <label data-i18n="listingPage.landTypeLabel">نوع الأرض</label>
+        <select id="searchLandType">
+          <option value="" data-i18n="search.any">الكل</option>
+          <option value="residential" data-i18n="landType.residential">سكنية</option>
+          <option value="commercial" data-i18n="landType.commercial">تجارية</option>
+          <option value="agricultural" data-i18n="landType.agricultural">زراعية</option>
+        </select>
+      </div>
+      <div class="field" id="searchComTypeField" style="display:none;">
+        <label data-i18n="listingPage.comTypeLabel">نوع الاستخدام</label>
+        <select id="searchComType">
+          <option value="" data-i18n="search.any">الكل</option>
+          <option value="shop" data-i18n="comType.shop">محل تجاري</option>
+          <option value="office" data-i18n="comType.office">مكتب</option>
+          <option value="warehouse" data-i18n="comType.warehouse">مستودع</option>
+          <option value="mall" data-i18n="comType.mall">مجمع تجاري</option>
+        </select>
+      </div>
+      <div class="field" id="searchBrandField" style="display:none;">
+        <label data-i18n="listingPage.brandLabel">شركة التصنيع</label>
+        <select id="searchBrand"></select>
+      </div>
+      <div class="field" id="searchModelField" style="display:none;">
+        <label data-i18n="listingPage.modelLabel">الموديل</label>
+        <select id="searchModel"></select>
+      </div>
+      <div class="field">
+        <label data-i18n="search.sort.label">الترتيب</label>
+        <select id="searchSort">
+          <option value="newest" data-i18n="search.sort.newest">الأحدث أولاً</option>
+          <option value="priceAsc" data-i18n="search.sort.priceAsc">السعر: من الأقل للأعلى</option>
+          <option value="priceDesc" data-i18n="search.sort.priceDesc">السعر: من الأعلى للأقل</option>
+        </select>
+      </div>
+      <div class="search-actions" style="grid-column:1 / -1; display:flex; gap:10px; justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" id="mapViewToggleBtn" data-i18n="map.showMapBtn">البحث بالخريطة</button>
+        <button type="button" class="btn btn-ghost" id="saveSearchBtn" data-i18n="savedSearch.saveBtn">حفظ هذا البحث</button>
+        <button type="button" class="btn btn-ghost" id="searchClearBtn" data-i18n="search.clearBtn">مسح الفلاتر</button>
+        <button type="button" class="btn btn-solid" id="searchSubmitBtn" data-i18n="search.cta">ابحث الآن</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="category-strip">
+    <div class="cat-card"><div class="cat-icon">⌂</div><div><h3 data-i18n="cat.apartments.title">شقق وفلل</h3><span data-i18n="cat.apartments.count">3٬240 إعلان</span></div></div>
+    <div class="cat-card"><div class="cat-icon">▦</div><div><h3 data-i18n="cat.land.title">أراضي</h3><span data-i18n="cat.land.count">1٬180 إعلان</span></div></div>
+    <div class="cat-card"><div class="cat-icon">🚗</div><div><h3 data-i18n="cat.cars.title">سيارات</h3><span data-i18n="cat.cars.count">2٬560 إعلان</span></div></div>
+    <div class="cat-card"><div class="cat-icon">🏢</div><div><h3 data-i18n="cat.commercial.title">عقارات تجارية</h3><span data-i18n="cat.commercial.count">640 إعلان</span></div></div>
+    <div class="cat-card"><div class="cat-icon">🏍</div><div><h3 data-i18n="cat.moto.title">دراجات نارية</h3><span data-i18n="cat.moto.count">310 إعلان</span></div></div>
+  </div>
+</section>
+
+<section class="wrap" id="mapViewSection" style="display:none;">
+  <div class="section-head">
+    <div>
+      <h2 data-i18n="map.showMapBtn">البحث بالخريطة</h2>
+    </div>
+  </div>
+  <div id="listingsMap" class="listings-map"></div>
+</section>
+
+<section class="wrap" id="realestate">
+  <div class="section-head">
+    <div>
+      <h2 data-i18n="realestate.heading">أحدث العقارات</h2>
+      <p data-i18n="realestate.sub">فلل وشقق وأراضي مختارة بعناية هذا الأسبوع</p>
+    </div>
+    <div class="section-head-actions">
+      <span class="results-count" id="realestateResultsCount"></span>
+      <a class="see-all" href="#" id="realestateClearFilters" data-i18n="realestate.seeAll">عرض جميع العقارات</a>
+    </div>
+  </div>
+  <div class="grid" id="realestateGrid">
+    <!-- تُعرض الإعلانات المنشورة فعليًا هنا تلقائيًا -->
+  </div>
+  <div class="pagination-controls" id="realestatePagination"></div>
+</section>
+
+<section class="wrap" id="cars">
+  <div class="section-head">
+    <div>
+      <h2 data-i18n="cars.heading">أحدث السيارات</h2>
+      <p data-i18n="cars.sub">سيارات مفحوصة وموثقة من أصحابها</p>
+    </div>
+    <div class="section-head-actions">
+      <span class="results-count" id="vehiclesResultsCount"></span>
+      <a class="see-all" href="#" id="carsClearFilters" data-i18n="cars.seeAll">عرض جميع السيارات</a>
+    </div>
+  </div>
+  <div class="grid" id="vehiclesGrid">
+    <!-- تُعرض الإعلانات المنشورة فعليًا هنا تلقائيًا -->
+  </div>
+  <div class="pagination-controls" id="vehiclesPagination"></div>
+</section>
+
+<section class="wrap trust-strip">
+  <div class="trust-item">
+    <div class="trust-icon">🤝</div>
+    <div>
+      <h3 data-i18n="trust.support.title">دعم محلي</h3>
+      <p data-i18n="trust.support.sub">فريق دعم سوداني يرد عليك بسرعة عند أي استفسار</p>
+    </div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">🔍</div>
+    <div>
+      <h3 data-i18n="trust.search.title">بحث أسهل</h3>
+      <p data-i18n="trust.search.sub">فلاتر ذكية وبحث بالخريطة تصلك بالإعلان المناسب فورًا</p>
+    </div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">🛡️</div>
+    <div>
+      <h3 data-i18n="trust.verified.title">إعلانات موثوقة</h3>
+      <p data-i18n="trust.verified.sub">بائعون موثّقون وإعلانات مراجعة لحمايتك من الاحتيال</p>
+    </div>
+  </div>
+</section>
+
+<section class="promo" id="sell">
+  <div class="wrap promo-inner">
+    <div class="promo-media"></div>
+    <div class="promo-text">
+      <h2 data-i18n="promo.heading">عندك عقار أو سيارة تبيعها؟</h2>
+      <p data-i18n="promo.sub">انشر إعلانك مجاناً ويصل لآلاف المهتمين الجادين خلال دقائق.</p>
+      <ul class="promo-list">
+        <li data-i18n="promo.point1">نشر الإعلان خلال دقائق بدون تعقيد</li>
+        <li data-i18n="promo.point2">توثيق الإعلانات لحماية البائع والمشتري</li>
+        <li data-i18n="promo.point3">تواصل مباشر مع المهتمين عبر المنصة</li>
+      </ul>
+      <a class="btn btn-solid" href="add-listing.html" data-i18n="promo.cta">أضف إعلانك الآن</a>
+    </div>
+  </div>
+</section>
+
+<footer id="about">
+  <div class="wrap foot-grid">
+    <div>
+      <div class="foot-brand" data-i18n="brand.name">مباشر</div>
+      <p style="max-width:280px; font-size:14px;" data-i18n="footer.about">منصة سودانية لعرض وبيع وشراء العقارات والأراضي والسيارات والدراجات النارية مباشرة بين الأفراد والوسطاء.</p>
+    </div>
+    <div>
+      <h4 data-i18n="footer.sections.heading">الأقسام</h4>
+      <ul>
+        <li data-i18n="footer.sections.saleRealestate">عقارات للبيع</li>
+        <li data-i18n="footer.sections.rentRealestate">عقارات للإيجار</li>
+        <li data-i18n="footer.sections.land">أراضي</li>
+        <li data-i18n="footer.sections.cars">سيارات</li>
+        <li data-i18n="footer.sections.moto">دراجات نارية</li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="footer.company.heading">الشركة</h4>
+      <ul>
+        <li data-i18n="footer.company.about">من نحن</li>
+        <li data-i18n="footer.company.contact">تواصل معنا</li>
+        <li data-i18n="footer.company.faq">الأسئلة الشائعة</li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="footer.contact.heading">تواصل</h4>
+      <ul>
+        <li data-i18n="footer.contact.support">الدعم الفني</li>
+        <li><a href="terms.html" data-i18n="footer.contact.terms">الشروط والأحكام</a></li>
+        <li><a href="privacy.html" data-i18n="footer.contact.privacy">سياسة الخصوصية</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-cta">
+    <div>
+      <h3 data-i18n="footer.cta.heading">انضم إلى مباشر اليوم</h3>
+      <p data-i18n="footer.cta.sub">أنشئ حسابك وابدأ بنشر إعلاناتك أو تصفح آلاف العروض المتاحة</p>
+    </div>
+    <a class="btn btn-solid" href="signup.html" data-i18n="footer.cta.btn">سجّل الآن</a>
+  </div>
+  <div class="wrap foot-bottom" data-i18n="footer.copyright">© 2026 مباشر. جميع الحقوق محفوظة.</div>
+</footer>
+
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <button type="button" class="modal-close" id="closeProfile" data-i18n-aria-label="profile.closeBtnLabel">×</button>
+    <h3 data-i18n="profile.title">الملف الشخصي</h3>
+
+    <div class="profile-photo-row">
+      <div class="profile-photo-preview" id="profilePhotoPreview">م</div>
+      <div>
+        <label class="btn btn-ghost profile-photo-btn" for="profilePhotoInput" data-i18n="profile.changePhotoBtn">تغيير الصورة</label>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+      </div>
+    </div>
+    <div class="profile-account-info">
+      <div class="profile-info-email" id="profileEmail"></div>
+    </div>
+
+    <div class="form-status" id="profileStatus"></div>
+
+    <div class="form-field" id="profileNameField">
+      <label for="profileNameInput" data-i18n="profile.nameLabel">الاسم الكامل</label>
+      <input type="text" id="profileNameInput" data-i18n-placeholder="field.fullName" placeholder="الاسم الكامل">
+      <span class="error-msg" data-i18n="error.fullName">الرجاء إدخال الاسم الكامل</span>
+    </div>
+    <div class="form-field" id="profilePhoneField">
+      <label for="profilePhoneInput" data-i18n="profile.phoneLabel">رقم الجوال</label>
+      <input type="tel" id="profilePhoneInput" placeholder="09xxxxxxxx">
+      <span class="error-msg" data-i18n="error.phone">الرجاء إدخال رقم جوال صحيح (10 أرقام)</span>
+    </div>
+    <div class="form-field" id="profileAddressField">
+      <label for="profileAddress" data-i18n="profile.addressLabel">العنوان</label>
+      <input type="text" id="profileAddress" data-i18n-placeholder="profile.addressPlaceholder" placeholder="أدخل عنوانك">
+    </div>
+    <div class="form-field" id="profileUsernameField" style="display:none;">
+      <label for="profileUsernameInput" data-i18n="profile.usernameLabel">اسم المستخدم (لتسجيل دخول الإدارة)</label>
+      <input type="text" id="profileUsernameInput" data-i18n-placeholder="profile.usernamePlaceholder" placeholder="مثال: mohamed_ahmed" autocomplete="off">
+      <span class="error-msg" id="profileUsernameFormatMsg" data-i18n="profile.usernameFormatError">3 إلى 20 حرفًا: أحرف إنجليزية أو أرقام أو _ أو . فقط</span>
+      <span class="error-msg" id="profileUsernameTakenMsg" data-i18n="profile.usernameTakenError">اسم المستخدم هذا مُستخدَم بالفعل</span>
+      <p class="hint" data-i18n="profile.usernameHint">يمكنك استخدام اسم المستخدم هذا بدلاً من بريدك الإلكتروني لتسجيل الدخول من صفحة دخول الإدارة.</p>
+    </div>
+    <button type="button" class="btn btn-solid" id="saveProfileInfoBtn" data-i18n="profile.saveInfoBtn" style="width:100%; margin-bottom:22px;">حفظ البيانات</button>
+
+    <div class="form-section-title" data-i18n="profile.changePasswordTitle" style="margin-top:0;">تغيير كلمة المرور</div>
+    <div class="form-field" id="currentPasswordField">
+      <label for="currentPassword" data-i18n="profile.currentPasswordLabel">كلمة المرور الحالية</label>
+      <input type="password" id="currentPassword">
+      <span class="error-msg" data-i18n="profile.currentPasswordError">كلمة المرور الحالية غير صحيحة</span>
+    </div>
+    <div class="form-field" id="newPasswordProfileField">
+      <label for="newPasswordProfile" data-i18n="profile.newPasswordLabel">كلمة المرور الجديدة</label>
+      <input type="password" id="newPasswordProfile">
+      <span class="error-msg" data-i18n="error.password">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
+    </div>
+    <div class="form-field" id="confirmNewPasswordProfileField">
+      <label for="confirmNewPasswordProfile" data-i18n="profile.confirmNewPasswordLabel">تأكيد كلمة المرور الجديدة</label>
+      <input type="password" id="confirmNewPasswordProfile">
+      <span class="error-msg" data-i18n="error.confirmPassword">كلمتا المرور غير متطابقتين</span>
+    </div>
+    <button type="button" class="btn btn-solid" id="savePasswordBtn" data-i18n="profile.savePasswordBtn" style="width:100%;">تحديث كلمة المرور</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="leaflet.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
